@@ -1,0 +1,33 @@
+{% extends "main/master.html" %}
+
+{% block title %}
+    Add spending
+{% endblock %}
+
+{% block content %}
+<div class="shadow m-5 p-2 bg-dark text-white rounded-5">
+    <div class="text-center"><h1><span class="badge text-bg-light">Add Spending Form</span><br></h1></div>
+
+    {% if form.errors %}
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong><i class="fa-solid fa-triangle-exclamation"></i></strong> {{ form.errors }}
+        </div>   
+    {% endif %}
+
+    <form method="POST" class="rounded-5 me-5 ms-5 mt-4 mb-3">
+        {% csrf_token %}
+        {{ form.category }}<br>
+        {{ form.amount }}<br>
+        {{ form.date }}<br>
+        {{ form.user }}
+        <button class="btn btn-outline-success" type="submit" style="width: 100%;">Add</button>
+    </form> 
+    <div class="rounded-5 me-5 ms-5 mt-4 mb-3">
+        <a href="{% url 'add_category' %}"><button class="btn btn-outline-success" style="width: 100%;">Add category</button></a>
+    </div>    
+    
+    
+ </div>
+
+{% endblock %}

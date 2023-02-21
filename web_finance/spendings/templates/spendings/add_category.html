@@ -1,0 +1,37 @@
+{% extends "main/master.html" %}
+
+{% block title %}
+    Add Category
+{% endblock %}
+
+{% block content %}
+<div class="shadow m-5 p-2 bg-dark text-white rounded-5">
+    <div class="text-center"><h1><span class="badge text-bg-light">Add Category Form</span><br></h1></div>
+
+    {% if form.errors %}
+        <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong><i class="fa-solid fa-triangle-exclamation"></i></strong> {{ form.errors }}
+        </div>   
+    {% endif %}
+
+    <form method="POST" class="rounded-5 me-5 ms-5 mt-4 mb-3">
+        {% csrf_token %}
+        {{ form.description }}<br>
+        <button class="btn btn-outline-success" type="submit" style="width: 100%;">Add</button>
+    </form>    
+</div>
+<div class="text-center"><h1><span class="badge text-bg-dark">Categories</span><br></h1></div>
+<div class="d-flex ms-5 me-5 p-2">
+    <div class="flex-grow-1">
+        <ul class="list-group"> 
+            {% for cat in allcategories %}
+                <li class="list-group-item  list-group-item-info">
+                    <a href="{% url 'delete_category' cat.id %}"><button class="btn btn-outline-danger"><i class="fa-solid fa-trash-can"></i></button></a>
+                    {{ cat.description }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

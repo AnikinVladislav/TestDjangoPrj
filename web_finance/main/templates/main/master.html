@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<!-- <link rel="stylesheet" href="{% static 'main.css' %}"> -->
+<!-- Latest compiled and minified CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://kit.fontawesome.com/e4ccca3202.css" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/e4ccca3202.js" crossorigin="anonymous"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="d-flex justify-content-center">
+            <div class="align-self-center me-3">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <h6>Menu</h6>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="align-self-center">
+                <img src="{% static 'main/logo-no-background.png' %}" class="img-fluid" alt="Logo">
+            </div>
+            <div class="align-self-center ms-3">
+                {% if user.is_authenticated %}
+                    <ul class="list-group">
+                        <li class="list-group-item text-center bg-dark border-0">
+                            <a href="{% url 'logout' %}"><button class="btn btn-outline-light w-100" type="button">Logout</button></a>
+                        </li>
+                        <li class="list-group-item text-center bg-dark border-0">
+                            <a href="{% url 'edit_profile' %}"><button class="btn btn-outline-light w-100" type="button">Edit</button></a>
+                        </li>
+                    </ul>
+                    
+                {% else %}
+                    <ul class="list-group">
+                        <li class="list-group-item text-center bg-dark border-0">
+                            <a href="{% url 'login' %}"><button class="btn btn-outline-light w-100" type="button">Login</button></a>
+                        </li>
+                        <li class="list-group-item text-center bg-dark border-0">
+                            <a href="{% url 'register_user' %}"><button class="btn btn-outline-light w-100" type="button">Registration</button></a>
+                        </li>
+                    </ul>
+                {% endif %}      
+            </div>                     
+        </div>
+        
+    </nav>
+    <div class="collapse m-2" id="navbarToggleExternalContent">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'main' %}"><i class="fa-solid fa-house-chimney"></i> Home</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'spendings' user.id %}"><i class="fa-solid fa-list"></i> Show all spendings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'main' %}"><i class="fa-solid fa-chart-column"></i> Graph</a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'about' %}"><i class="fa-solid fa-info"></i> About us</a>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <div class="container-fluid m-2">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <strong><i class="fa-solid fa-triangle-exclamation"></i></strong> {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% block content %}
+        {% endblock %}
+    </div>
+    
+</body>
+</html>
