@@ -14,17 +14,24 @@ from django.db.models import Q
 def spendigs_view(request, id):
     myuser = User.objects.get(id=id)
     allcategories = categories.objects.all().values()
-    print(request.GET)
     searched_id = []
-    for cat in allcategories: 
-        if ('q' in request.GET) and (request.GET['q'].lower() in cat['description'].lower()):
-            searched_id.append(cat['id'])
-        else:
-            searched_id.append(cat['id'])
+    query = ''
+    print(request.GET)
+    # exception with the first opening spendings page
+    if ('q' in request.GET):
+        query = request.GET['q']
+        for cat in allcategories: 
+            if request.GET['q'].lower() in cat['description'].lower():
+                searched_id.append(cat['id'])
+        myuserspendings = spendings.objects.filter(Q(user=myuser) & Q(category__in=searched_id)).order_by('-date').values()
+        # set up paginator, 6 spendings per page
+        p = Paginator(spendings.objects.filter(Q(user=myuser) & Q(category__in=searched_id)).order_by('-date').values(), 6)
+    else:
+        myuserspendings = spendings.objects.filter(user=myuser).order_by('-date').values()
+        # set up paginator, 6 spendings per page
+        p = Paginator(spendings.objects.filter(user=myuser).order_by('-date').values(), 6)
 
-    myuserspendings = spendings.objects.filter(Q(user=myuser) & Q(category__in=searched_id)).order_by('-date').values()
-    # set up paginator, 6 spendings per page
-    p = Paginator(spendings.objects.filter(Q(user=myuser) & Q(category__in=searched_id)).order_by('-date').values(), 6)
+
 
     page = request.GET.get('page')
     spendings_page = p.get_page(page)
@@ -43,7 +50,8 @@ def spendigs_view(request, id):
         'nums_ge_6': nums_ge_6,
         'last_num_page': last_num_page,
         'prelast_num_page': prelast_num_page,
-        'preprelast_num_page': preprelast_num_page
+        'preprelast_num_page': preprelast_num_page,
+        'query': query
     }
     return render(request, 'spendings/list_spendings.html', context)
 
