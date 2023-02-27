@@ -9,10 +9,10 @@
 <div class="d-flex justify-content-end p-2 ms-3 me-3">
     <form class="d-flex">
         <div class="d-flex me-2"><input type="text" class="form-control" name="q" value="{{ query }}"></input></div>
-        <div class="d-flex"><button type="submit" class="btn btn-outline-success btn-lg me-2"><i class="fa-solid fa-magnifying-glass"></i></button></div>
+        <div class="d-flex"><button type="submit" class="btn btn-outline-success btn-md me-2"><i class="fa-solid fa-magnifying-glass"></i></button></div>
     </form>
-    <a href="{% url 'spendingscsv' %}"><button class="btn btn-outline-success btn-lg me-2" type="button"><i class="fa-solid fa-file-csv"></i></button></a>
-    <a href="{% url 'add_spending' %}"><button class="btn btn-outline-success btn-lg" type="button"><i class="fa-solid fa-plus"></i></button></a>
+    <a href="{% url 'spendingscsv' %}"><button class="btn btn-outline-success btn-md me-2" type="button"><i class="fa-solid fa-file-csv"></i></button></a>
+    <a href="{% url 'add_spending' %}"><button class="btn btn-outline-success btn-md" type="button"><i class="fa-solid fa-plus"></i></button></a>
 </div>
 <div class="d-flex p-2">
     <div class="flex-grow-1">
@@ -40,32 +40,65 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination">
             {% if spendings_page.has_previous %}
-                <li class="page-item"><a class="page-link" href="?page={{spendings_page.previous_page_number}}&q={{ query }}">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{spendings_page.previous_page_number}}&q={{ query }}"><i class="fa-solid fa-angle-left"></i></a></li>
             {% endif %}
             {% if nums_ge_6 %}
-                <a class="page-link" href="?page=1&q={{ query }}">1</a>
-                <a class="page-link" href="?page=2&q={{ query }}">2</a>
-                <a class="page-link" href="?page=3&q={{ query }}">3</a>
-                <a class="page-link disabled" href="?page=3">...</a>
-                <a class="page-link" href="?page={{preprelast_num_page}}&q={{ query }}">{{preprelast_num_page}}</a>
-                <a class="page-link" href="?page={{prelast_num_page}}&q={{ query }}">{{prelast_num_page}}</a>
-                <a class="page-link" href="?page={{last_num_page}}&q={{ query }}">{{last_num_page}}</a>
+                {% if spendings_page.number == 1 %}
+                    <a class="page-link active" href="?page=1&q={{ query }}">1</a>
+                {% else %}
+                    <a class="page-link" href="?page=1&q={{ query }}">1</a>
+                {% endif %}
+                {% if spendings_page.number == 2 %}
+                    <a class="page-link active" href="?page=2&q={{ query }}">2</a>
+                {% else %}
+                    <a class="page-link" href="?page=2&q={{ query }}">2</a>
+                {% endif %}
+                {% if spendings_page.number == 3 %}
+                    <a class="page-link active" href="?page=3&q={{ query }}">3</a>
+                {% else %}
+                    <a class="page-link" href="?page=3&q={{ query }}">3</a>
+                {% endif %}
+                {% if spendings_page.number > 3 and preprelast_num_page > spendings_page.number %}
+                    <a class="page-link active" href="?page={{spendings_page.number}}&q={{ query }}">{{spendings_page.number}}</a>
+                {% else %}
+                    <a class="page-link disabled" href="?page=3">...</a>
+                {% endif %}
+                {% if spendings_page.number == preprelast_num_page %}
+                    <a class="page-link active" href="?page={{preprelast_num_page}}&q={{ query }}">{{preprelast_num_page}}</a>
+                {% else %}
+                    <a class="page-link" href="?page={{preprelast_num_page}}&q={{ query }}">{{preprelast_num_page}}</a>
+                {% endif %}
+                {% if spendings_page.number == prelast_num_page %}
+                    <a class="page-link active" href="?page={{prelast_num_page}}&q={{ query }}">{{prelast_num_page}}</a>
+                {% else %}
+                    <a class="page-link" href="?page={{prelast_num_page}}&q={{ query }}">{{prelast_num_page}}</a>
+                {% endif %}
+                {% if spendings_page.number == last_num_page %}
+                    <a class="page-link active" href="?page={{last_num_page}}&q={{ query }}">{{last_num_page}}</a>
+                {% else %}
+                    <a class="page-link" href="?page={{last_num_page}}&q={{ query }}">{{last_num_page}}</a>
+                {% endif %}                
             {% else %}
                 {% for i in nums %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{forloop.counter}}&q={{ query }}">
-                            {{ forloop.counter }}
-                        </a>
-                    </li>
+                    {% if forloop.counter == spendings_page.number %}
+                        <li class="page-item active">
+                            <a class="page-link" href="?page={{forloop.counter}}&q={{ query }}">
+                                {{ forloop.counter }}
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{forloop.counter}}&q={{ query }}">
+                                {{ forloop.counter }}
+                            </a>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
             {% if spendings_page.has_next %}
-                <li class="page-item"><a class="page-link" href="?page={{spendings_page.next_page_number}}&q={{ query }}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{spendings_page.next_page_number}}&q={{ query }}"><i class="fa-solid fa-angle-right"></i></a></li>
             {% endif %}
         </ul>
     </nav>
 </div>
-
-
-
 {% endblock %}  

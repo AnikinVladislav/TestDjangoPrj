@@ -1,0 +1,109 @@
+{% extends "main/master.html" %}
+
+{% block title %}
+    Prediction
+{% endblock %}
+
+{% block content %}
+<!-- {% for key, value in predict_day.items %}
+  <div class="text-center"><h1><span class="badge text-bg-dark">{{key}} : {{value}}</span><br></h1></div>
+{% endfor %}
+{% for key, value in predict_month.items %}
+  <div class="text-center"><h1><span class="badge text-bg-dark">{{key}} : {{value}}</span><br></h1></div>
+{% endfor %} -->
+
+<div class="text-center"><h1><span class="badge text-bg-dark">Mean day spending : {{mean_day|floatformat}} <i class="fa-solid fa-ruble-sign"></i></span><br></h1></div>
+<div class="d-flex m-2 p-2 justify-content-center rounded-5">
+    <canvas id="myChart"></canvas>
+</div>
+<div class="text-center"><h1><span class="badge text-bg-dark">Mean month spending : {{mean_month|floatformat}} <i class="fa-solid fa-ruble-sign"></i></span><br></h1></div>
+<div class="d-flex m-2 p-2 justify-content-center rounded-5">
+    <canvas id="myChart2"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+<script>
+    const ctx = document.getElementById('myChart');
+  
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{category_desc|safe}},
+        datasets: [{
+          label: 'Day Prediction Amount by Category',
+          fill: true,
+          data: {{predict_day|safe}},
+          borderWidth: 2,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 205, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(201, 203, 207, 0.2)'
+            ],
+          borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)',
+            'rgb(201, 203, 207)'
+            ],
+          tension: 0.3
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    const ctx1 = document.getElementById('myChart2');
+  
+    new Chart(ctx1, {
+        type: 'bar',
+        data: {
+        labels: {{category_desc|safe}},
+        datasets: [{
+            label: 'Month Prediction Amount by Category',
+            fill: true,
+            data: {{predict_month|safe}},
+            borderWidth: 2,
+            backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 205, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(201, 203, 207, 0.2)'
+            ],
+            borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)',
+            'rgb(201, 203, 207)'
+            ],
+            tension: 0.3
+        }]
+        },
+        options: {
+        scales: {
+            y: {
+            beginAtZero: true
+            }
+        }
+        }
+    });
+</script>
+{% endblock %}
